@@ -21,15 +21,9 @@ interface IStorageAction {
   payload?: any
 }
 
-type IStorageReducer<T> = (
-  state: IStorageState<T>,
-  action: IStorageAction,
-) => IStorageState<T>
+type IStorageReducer<T> = (state: IStorageState<T>, action: IStorageAction) => IStorageState<T>
 
-const reducer: IStorageReducer<any> = <T>(
-  state: IStorageState<T>,
-  action: IStorageAction,
-) => {
+const reducer: IStorageReducer<any> = <T>(state: IStorageState<T>, action: IStorageAction) => {
   let result: IStorageState<T> = state
 
   switch (action.type) {
@@ -79,23 +73,16 @@ const reducer: IStorageReducer<any> = <T>(
     default:
       assertNever(action.type)
   }
-  console.debug(
-    `%c${action.type}`,
-    'background: green; color: white; display: block;',
-    {
-      previousState: state,
-      action,
-      newState: result,
-    },
-  )
+  console.log(`storage action: %c${action.type}`, 'background: yellow; color: black; display: block;', {
+    previousState: state,
+    action,
+    newState: result,
+  })
 
   return result
 }
 
-export const useStorage = <TEntity>(
-  storageKey: string,
-  initialEntity: TEntity,
-) => {
+export const useStorage = <TEntity>(storageKey: string, initialEntity: TEntity) => {
   const initialData = useRef<IStorageState<TEntity>>({
     data: initialEntity,
     storageValue: undefined,
@@ -113,7 +100,7 @@ export const useStorage = <TEntity>(
   useEffect(() => {
     dispatch({ type: 'get' })
 
-    LocalStorage.get([storageKey], (result) => {
+    LocalStorage.get([storageKey], result => {
       if (!LocalStorage.lastError) {
         const newData = result[storageKey]
         if (newData && !fastDeepEqual(state.data, newData)) {
@@ -129,10 +116,7 @@ export const useStorage = <TEntity>(
   }, [])
 
   useEffect(() => {
-    if (
-      state.storageValue !== undefined &&
-      !fastDeepEqual(state.data, state.storageValue)
-    ) {
+    if (state.storageValue !== undefined && !fastDeepEqual(state.data, state.storageValue)) {
       dispatch({ type: 'save' })
 
       LocalStorage.set({ [storageKey]: state.data }, () => {
@@ -147,8 +131,11 @@ export const useStorage = <TEntity>(
   }, [state.data])
 
   const storageCallback = (e: StorageEvent) => {
-    if (!fastDeepEqual(state.data, e.newValue)) {
-      dispatch({ type: 'storage-changed', payload: e.newValue })
+    if (e.key === storageKey) {
+      const newValue = e.newValue ? JSON.parse(e.newValue) : undefined
+      if (!fastDeepEqual(state.data, newValue)) {
+        dispatch({ type: 'storage-changed', payload: newValue })
+      }
     }
   }
 
