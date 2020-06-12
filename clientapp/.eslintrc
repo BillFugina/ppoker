@@ -1,0 +1,8 @@
+{
+  "extends": ["react-app"],
+  "rules": {
+    "no-unused-expressions": "error",
+    "no-unused-labels": "error",
+    "@typescript-eslint/no-unused-vars": "error"
+  }
+}
