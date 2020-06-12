@@ -1,10 +1,25 @@
 import * as React from 'react'
-import logo from 'logo.svg'
-import 'App.css'
 import { useAppState } from 'app-state/use-app-state'
 import * as Action from 'app-state/actions'
+import CssBaseline from '@material-ui/core/CssBaseline'
+// import Typography from '@material-ui/core/Typography'
+import Container from '@material-ui/core/Container'
+import { TextField, Grid, Button, Paper, Theme, createStyles, makeStyles, Chip } from '@material-ui/core'
 
 interface MainProps {}
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    chip: {
+      margin: theme.spacing(0.5),
+    },
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'start',
+      color: theme.palette.text.secondary,
+    },
+  }),
+)
 
 const Main: React.FunctionComponent<MainProps> = props => {
   const [state, dispatch] = useAppState()
@@ -12,7 +27,7 @@ const Main: React.FunctionComponent<MainProps> = props => {
   const [channelName, setChannelName] = React.useState(state.userName)
   const [userName, setUserName] = React.useState(state.userName)
 
-  const handleClick = () => {
+  const handleJoinClick = () => {
     dispatch(Action.addUser(state.userName))
   }
 
@@ -20,7 +35,7 @@ const Main: React.FunctionComponent<MainProps> = props => {
     setChannelName(event.target.value)
   }
 
-  const handleChannelNameClick = () => {
+  const handleChannelNameBlur = () => {
     if (channelName) {
       dispatch(Action.setChannelName(channelName))
     }
@@ -30,32 +45,56 @@ const Main: React.FunctionComponent<MainProps> = props => {
     setUserName(event.target.value)
   }
 
-  const handleUserNameClick = () => {
+  const handleUserNameBlur = () => {
     if (userName) {
       dispatch(Action.setUserName(userName))
     }
   }
 
+  const canJoin = state.userName !== '' && state.channelName !== ''
+
+  const classes = useStyles()
+
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          <input type='text' value={userName} onChange={handleUserNameChange} />
-          <button onClick={handleUserNameClick}>Set User Name</button>
-        </p>
-        <p>
-          <input type='text' value={channelName} onChange={handleChannelNameChange} />
-          <button onClick={handleChannelNameClick}>Set Channel Name</button>
-        </p>
-        <button onClick={handleClick}>Click Me</button>
-        <ul>
-          {state.users.map(u => (
-            <li key={u}>{u}</li>
-          ))}
-        </ul>
-      </header>
-    </div>
+    <>
+      <CssBaseline />
+      <Container maxWidth='md'>
+        <Grid container justify='center' alignItems='baseline' spacing={3}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth={true}
+              id='channel-input'
+              label='Channel'
+              onBlur={handleChannelNameBlur}
+              onChange={handleChannelNameChange}
+              value={channelName}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id='user-input'
+              label='User Name'
+              onBlur={handleUserNameBlur}
+              onChange={handleUserNameChange}
+              value={userName}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button disabled={!canJoin} variant='outlined' onClick={handleJoinClick}>
+              Join
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              {state.users.map(user => (
+                <Chip className={classes.chip} key={user} label={user} />
+              ))}
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   )
 }
 
