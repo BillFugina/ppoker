@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from 'react'
+import { useEffect, useReducer, useRef, useCallback } from 'react'
 import { IStorageState, IStorageHookResult } from 'storage/types'
 
 import fastDeepEqual from 'fast-deep-equal'
@@ -73,11 +73,11 @@ const reducer: IStorageReducer<any> = <T>(state: IStorageState<T>, action: IStor
     default:
       assertNever(action.type)
   }
-  console.log(`storage action: %c${action.type}`, 'background: yellow; color: black; display: block;', {
-    previousState: state,
-    action,
-    newState: result,
-  })
+  // console.log(`storage action: %c${action.type}`, 'background: yellow; color: black; display: block;', {
+  //   previousState: state,
+  //   action,
+  //   newState: result,
+  // })
 
   return result
 }
@@ -146,9 +146,9 @@ export const useStorage = <TEntity>(storageKey: string, initialEntity: TEntity) 
     }
   })
 
-  const setData = (data: TEntity) => {
+  const setData = useCallback((data: TEntity) => {
     dispatch({ type: 'set', payload: data })
-  }
+  }, [])
 
   const result: IStorageHookResult<TEntity> = { ...state, setData }
 

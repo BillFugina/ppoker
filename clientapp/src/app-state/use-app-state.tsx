@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { AppState, defaultAppState } from 'app-state/definitions'
-import { AppStateAction, BroadcastActionTypes } from 'app-state/actions'
-import { assertNever } from 'system/assert-never'
+import { AppState, defaultAppState, ChannelMessage } from 'app-state/definitions'
+import { AppStateAction, BroadcastActionTypes, updateSendFunction } from 'app-state/actions'
 import { useChannel } from 'channel'
 import { newGuid } from 'system/guid'
+import { useReducerWithEffects, Update, TStateWithEffects } from 'hooks/use-reducer-with-side-effects'
 
-const appStateReducer = (state: AppState, action: AppStateAction): AppState => {
+const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEffects<AppState, AppStateAction> => {
   let result = state
 
   if (action.type === 'addUser') {
@@ -22,8 +22,25 @@ const appStateReducer = (state: AppState, action: AppStateAction): AppState => {
     result = { ...state, channelName: action.channelName }
   } else if (action.type === 'setUserName') {
     result = { ...state, userName: action.userName }
-  } else {
-    assertNever(action)
+  } else if (action.type === 'updateSendFunction') {
+    result = { ...state, send: action.sendFunction }
+  }
+  //  else {
+  //     assertNever(action)
+  //   }
+
+  if (result.channelName && result.userName && result.send && BroadcastActionTypes.includes(action.type)) {
+    const message: ChannelMessage = {
+      action,
+      channel: result.channelName,
+      fromUser: result.userName,
+      id: newGuid(),
+      stamp: new Date(),
+    }
+
+    console.log(`channel send: %c${action.type}`, 'background: blue; color: white; display: block;', message)
+
+    result.send(message)
   }
 
   console.log(`app state action: %c${action.type}`, 'background: green; color: white; display: block;', {
@@ -32,43 +49,17 @@ const appStateReducer = (state: AppState, action: AppStateAction): AppState => {
     newState: result,
   })
 
-  return result
-}
-
-type ChannelMessage = {
-  action: AppStateAction
-  channel: string
-  fromUser: string
-  id: string
-  stamp: Date
-  toUser?: string
+  return Update(result)
 }
 
 const AppStateHook = (): [AppState, React.Dispatch<AppStateAction>] => {
-  const [state, _dispatch] = React.useReducer(appStateReducer, defaultAppState())
-  const [message, send] = useChannel<ChannelMessage>(state.channelName ?? 'none')
+  const [state, dispatch] = useReducerWithEffects(appStateReducer, defaultAppState())
+  const [message, send] = useChannel<ChannelMessage>(state.channelName || 'none')
   const [handledMessages, setHandledMessages] = React.useState<string[]>([])
 
-  const dispatch: React.Dispatch<AppStateAction> = React.useCallback(
-    (action: AppStateAction) => {
-      _dispatch(action)
-
-      if (state.channelName && state.userName && BroadcastActionTypes.includes(action.type)) {
-        const message: ChannelMessage = {
-          action,
-          channel: state.channelName,
-          fromUser: state.userName,
-          id: newGuid(),
-          stamp: new Date(),
-        }
-
-        console.log(`channel send: %c${action.type}`, 'background: blue; color: white; display: block;', message)
-
-        send(message)
-      }
-    },
-    [send, state.channelName, state.userName],
-  )
+  React.useEffect(() => {
+    dispatch(updateSendFunction(send))
+  }, [dispatch, send])
 
   React.useEffect(() => {
     if (message) {
@@ -83,7 +74,7 @@ const AppStateHook = (): [AppState, React.Dispatch<AppStateAction>] => {
             'background: white; color: blue; display: block;',
             message,
           )
-          _dispatch(message.action)
+          dispatch(message.action)
         }
       }
     }
