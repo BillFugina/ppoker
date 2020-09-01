@@ -10,6 +10,7 @@ import {
   addUser,
   welcome,
   claimChannel,
+  joinChannel,
 } from 'app-state/actions'
 import { useChannel } from 'channel'
 import { newGuid } from 'system/guid'
@@ -35,8 +36,8 @@ const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEff
     }
 
     sideEffects.push((state, dispatch) => {
-      const { channelOwner, users } = state
-      dispatch(broadcastAction(broadcastState({ channelOwner, users })))
+      const { channelOwner, users, roundState, roundValues } = state
+      dispatch(broadcastAction(broadcastState({ channelOwner, users, roundState, roundValues })))
     })
   } else if (action.type === 'removeUser') {
     if (state.users.includes(action.user)) {
@@ -87,6 +88,10 @@ const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEff
         sideEffects.push((state, dispatch) => {
           dispatch(broadcastAction(claimChannel(state.channelName, state.userName)))
         })
+      } else if (state.gameState === 'joiningChannel') {
+        sideEffects.push((state, dispatch) => {
+          dispatch(joinChannel(state.channelName, state.userName))
+        })
       }
     }
   } else if (action.type === 'joinChannel') {
@@ -132,7 +137,45 @@ const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEff
     if (state.gameState === 'joiningChannel') {
       result = { ...state, gameState: 'playerView' }
     }
-  } else {
+  } else if (action.type === 'openRound') {
+    if (isOwner && state.gameState === 'ownerView') {
+      sideEffects.push((state, dispatch) => {
+        dispatch(broadcastAction(action))
+      })
+    }
+    result = { ...state, roundState: 'open', roundValues: {} }
+  } else if (action.type === 'closeRound') {
+    if (isOwner && state.gameState === 'ownerView') {
+      sideEffects.push((state, dispatch) => {
+        dispatch(broadcastAction(action))
+      })
+    }
+    result = { ...state, roundState: 'closed' }
+  } else if (action.type === 'startNewRound') {
+    if (isOwner && state.gameState === 'ownerView') {
+      sideEffects.push((state, dispatch) => {
+        dispatch(broadcastAction(action))
+      })
+    }
+    result = { ...state, roundState: 'waiting', roundValues: {} }
+  } else if (action.type === 'submitVote') {
+    if (isOwner && state.gameState === 'ownerView' && state.roundState === 'open') {
+      const roundValues = { ...state.roundValues, [action.userName]: action.value }
+      result = { ...state, roundValues }
+
+      sideEffects.push((state, dispatch) => {
+        dispatch(broadcastAction(broadcastState({ roundValues: result.roundValues })))
+      })
+    } else if (state.gameState === 'playerView' && state.roundState === 'open') {
+      sideEffects.push((state, dispatch) => {
+        dispatch(broadcastAction(action, state.channelOwner))
+      })
+      result = { ...state, roundValues: { [state.userName]: action.value } }
+    }
+  }
+
+  //
+  else {
     assertNever(action)
   }
 

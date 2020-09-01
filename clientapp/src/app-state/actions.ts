@@ -1,4 +1,4 @@
-import { ChannelMessage, AppState } from 'app-state/definitions'
+import { ChannelMessage, AppState, Value } from 'app-state/definitions'
 
 export const addUser = (user: string) => ({
   type: 'addUser' as const,
@@ -65,6 +65,24 @@ export const broadcastAction = (action: BroadcastableAction, recipient?: string)
   recipient,
 })
 
+export const openRound = () => ({
+  type: 'openRound' as const,
+})
+
+export const closeRound = () => ({
+  type: 'closeRound' as const,
+})
+
+export const startNewRound = () => ({
+  type: 'startNewRound' as const,
+})
+
+export const submitVote = (userName: string, value?: Value) => ({
+  type: 'submitVote' as const,
+  userName,
+  value,
+})
+
 export type BroadcastableAction =
   | ReturnType<typeof addUser>
   | ReturnType<typeof removeUser>
@@ -77,6 +95,10 @@ export type BroadcastableAction =
   | ReturnType<typeof broadcastState>
   | ReturnType<typeof leaveChannel>
   | ReturnType<typeof updateSendFunction>
+  | ReturnType<typeof openRound>
+  | ReturnType<typeof closeRound>
+  | ReturnType<typeof startNewRound>
+  | ReturnType<typeof submitVote>
 
 export type AppStateAction = BroadcastableAction | ReturnType<typeof broadcastAction>
 
