@@ -1,5 +1,4 @@
-import { SharedState } from 'shared-state/definitions'
-import { ChannelMessage } from 'app-state/definitions'
+import { ChannelMessage, AppState } from 'app-state/definitions'
 
 export const addUser = (user: string) => ({
   type: 'addUser' as const,
@@ -24,9 +23,10 @@ export const setUserName = (userName: string) => {
   return result
 }
 
-export const claimChannel = (channelName: string) => ({
+export const claimChannel = (channelName: string, userName?: string) => ({
   type: 'claimChannel' as const,
   channelName,
+  userName,
 })
 
 export const joinChannel = (channelName: string, userName: string) => ({
@@ -44,7 +44,7 @@ export const welcome = (userName: string) => ({
   userName,
 })
 
-export const broadcastState = (state: SharedState) => ({
+export const broadcastState = (state: Partial<AppState>) => ({
   type: 'broadcastState' as const,
   state,
 })
@@ -59,7 +59,13 @@ export const updateSendFunction = (sendFunction: (message: ChannelMessage) => vo
   sendFunction,
 })
 
-export type AppStateAction =
+export const broadcastAction = (action: BroadcastableAction, recipient?: string) => ({
+  type: 'broadcastAction' as const,
+  action,
+  recipient,
+})
+
+export type BroadcastableAction =
   | ReturnType<typeof addUser>
   | ReturnType<typeof removeUser>
   | ReturnType<typeof setChannelName>
@@ -71,6 +77,8 @@ export type AppStateAction =
   | ReturnType<typeof broadcastState>
   | ReturnType<typeof leaveChannel>
   | ReturnType<typeof updateSendFunction>
+
+export type AppStateAction = BroadcastableAction | ReturnType<typeof broadcastAction>
 
 type AppStateActionType = AppStateAction['type']
 

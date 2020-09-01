@@ -27,8 +27,12 @@ const Main: React.FunctionComponent<MainProps> = props => {
   const [channelName, setChannelName] = React.useState(state.userName)
   const [userName, setUserName] = React.useState(state.userName)
 
+  const handleHostClick = () => {
+    dispatch(Action.claimChannel(channelName, userName))
+  }
+
   const handleJoinClick = () => {
-    dispatch(Action.addUser(state.userName))
+    dispatch(Action.joinChannel(state.channelName, state.userName))
   }
 
   const handleChannelNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,16 +85,33 @@ const Main: React.FunctionComponent<MainProps> = props => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button disabled={!canJoin} variant='outlined' onClick={handleJoinClick}>
-              Join
-            </Button>
+            <Grid container spacing={1}>
+              <Grid item>
+                <Button disabled={!canJoin} variant='outlined' onClick={handleHostClick}>
+                  Host
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button disabled={!canJoin} variant='outlined' onClick={handleJoinClick}>
+                  Join
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               {state.users.map(user => (
-                <Chip className={classes.chip} key={user} label={user} />
+                <Chip
+                  className={classes.chip}
+                  key={user}
+                  label={user}
+                  color={user === state.channelOwner ? 'primary' : 'default'}
+                />
               ))}
             </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Chip label={state.gameState} />
           </Grid>
         </Grid>
       </Container>

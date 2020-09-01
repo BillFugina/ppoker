@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useRef, useCallback, ReducerState, ReducerAction, Dispatch } from 'react'
+import { useReducer, useEffect, useRef, useCallback, Dispatch } from 'react'
 
 // for testing
 export const NO_UPDATE_SYMBOL = Symbol('NO_UPDATE_SYMBOL')
@@ -9,13 +9,10 @@ export const NoUpdate = () => NO_UPDATE_SYMBOL
 
 type Reducer<S, A> = (prevState: S, action: A) => TStateWithEffects<S, A>
 
-type TSideEffect<S, A> = (state: S, dispatch: Dispatch<A>) => any
+export type TSideEffect<S, A> = (state: S, dispatch: Dispatch<A>) => any
 export type TStateWithEffects<S, A> = { state: S; sideEffects: TSideEffect<S, A>[] }
 
-export const UpdateWithSideEffect = <R extends Reducer<any, any>>(
-  state: ReducerState<R>,
-  sideEffects: TSideEffect<ReducerState<R>, ReducerAction<R>>[],
-) => ({
+export const UpdateWithSideEffect = <S, A>(state: S, sideEffects: TSideEffect<S, A>[]) => ({
   state,
   sideEffects,
 })
