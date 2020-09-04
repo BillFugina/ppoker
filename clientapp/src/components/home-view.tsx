@@ -4,33 +4,11 @@ import * as Action from 'app-state/actions'
 import CssBaseline from '@material-ui/core/CssBaseline'
 // import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import { TextField, Grid, Button, Theme, createStyles, makeStyles, Typography } from '@material-ui/core'
+import { TextField, Grid, Button, Typography } from '@material-ui/core'
 import { isNilOrEmpty } from 'utility/string-functions'
+import { useStyles } from 'styles/styles'
 
 interface HomeViewProps {}
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      marginRight: theme.spacing(1),
-    },
-    chip: {
-      margin: theme.spacing(0.5),
-    },
-    heroButtons: {
-      marginTop: theme.spacing(4),
-    },
-    heroContent: {
-      backgroundColor: theme.palette.background.paper,
-      padding: theme.spacing(8, 0, 6),
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'start',
-      color: theme.palette.text.secondary,
-    },
-  }),
-)
 
 const HomeView: React.FunctionComponent<HomeViewProps> = () => {
   const [didClick, setDidClick] = React.useState(false)
@@ -144,135 +122,20 @@ const HomeView: React.FunctionComponent<HomeViewProps> = () => {
               </Grid>
             </Grid>
           </div>
+          {/* <div className={classes.cards}>
+            {allValues.map(v => (
+              <div key={v} className={classes.card}>
+                <Flippy flipDirection='horizontal'>
+                  <FrontSide className={`${classes.cardSide}`}>
+                    <div className={classes.cardDisplay}>{valueLabels[v]}</div>
+                  </FrontSide>
+                  <BackSide>X</BackSide>
+                </Flippy>
+              </div>
+            ))}
+          </div> */}
         </Container>
       </div>
-
-      {/* <Container maxWidth='md'>
-        <Grid container justify='center' alignItems='baseline' spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              disabled={isPlaying}
-              error={didClick && isChannelNameError}
-              fullWidth
-              helperText={channelNameHelperText}
-              id='channel-input'
-              label='Channel'
-              onBlur={handleChannelNameBlur}
-              onChange={handleChannelNameChange}
-              required
-              value={channelName}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              disabled={isPlaying}
-              error={didClick && isUserNameError}
-              fullWidth
-              helperText={userNameHelperText}
-              id='user-input'
-              label='User Name'
-              onBlur={handleUserNameBlur}
-              onChange={handleUserNameChange}
-              required
-              value={userName}
-            />
-          </Grid>
-
-          {isSettingUp ? (
-            <Grid item xs={12}>
-              <div>
-                <Button className={classes.button} variant='outlined' onClick={handleHostClick}>
-                  Host
-                </Button>
-                <Button className={classes.button} variant='outlined' onClick={handleJoinClick}>
-                  Join
-                </Button>
-              </div>
-            </Grid>
-          ) : null}
-
-          {state.gameState === 'ownerView' ? (
-            <Grid item xs={12}>
-              <div>
-                {state.roundState === 'waiting' ? (
-                  <Button
-                    className={classes.button}
-                    disabled={!canJoin}
-                    variant='outlined'
-                    onClick={handleOpenRoundClick}
-                  >
-                    Open Round
-                  </Button>
-                ) : null}
-
-                {state.roundState === 'open' ? (
-                  <Button
-                    className={classes.button}
-                    disabled={!canJoin}
-                    variant='outlined'
-                    onClick={handleCloseRoundClick}
-                  >
-                    End Round
-                  </Button>
-                ) : null}
-
-                {state.roundState === 'closed' ? (
-                  <Button
-                    className={classes.button}
-                    disabled={!canJoin}
-                    variant='outlined'
-                    onClick={handleStartNewRoundClick}
-                  >
-                    Start New Round
-                  </Button>
-                ) : null}
-              </div>
-            </Grid>
-          ) : null}
-
-          <Grid item xs={12}>
-            <Paper className={classes.button}>
-              {state.users.map(user => {
-                const value = state.roundValues[user]
-                const label = value !== undefined ? `${user}: ${valueLabels[value]}` : user
-                const result = (
-                  <Chip
-                    className={classes.chip}
-                    key={user}
-                    label={label}
-                    color={user === state.channelOwner ? 'primary' : 'default'}
-                  />
-                )
-
-                return result
-              })}
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Chip label={`Game State: ${state.gameState}`} />
-            {state.gameState === 'ownerView' || state.gameState === 'playerView' ? (
-              <Chip label={`Round State: ${state.roundState}`} />
-            ) : null}
-          </Grid>
-
-          {state.gameState === 'playerView' && state.roundState === 'open' ? (
-            <Grid item xs={12}>
-              {allValues.map(v => (
-                <Button
-                  className={classes.button}
-                  key={v}
-                  onClick={handleValueButtonClick(v)}
-                  variant={userValue === v ? 'contained' : 'outlined'}
-                  size='large'
-                >
-                  {valueLabels[v]}
-                </Button>
-              ))}
-            </Grid>
-          ) : null}
-        </Grid>
-      </Container> */}
     </>
   )
 }

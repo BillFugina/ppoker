@@ -3,26 +3,11 @@ import { useAppState } from 'app-state/use-app-state'
 import * as Action from 'app-state/actions'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
-import { TextField, Grid, Button, Paper, Theme, createStyles, makeStyles, Chip } from '@material-ui/core'
+import { TextField, Grid, Button, Paper, Chip } from '@material-ui/core'
 import { valueLabels } from 'app-state/definitions'
+import { useStyles } from 'styles/styles'
 
 interface HostViewProps {}
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      marginRight: theme.spacing(1),
-    },
-    chip: {
-      margin: theme.spacing(0.5),
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'start',
-      color: theme.palette.text.secondary,
-    },
-  }),
-)
 
 const HostView: React.FunctionComponent<HostViewProps> = () => {
   const [state, dispatch] = useAppState()

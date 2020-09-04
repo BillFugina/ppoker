@@ -9,6 +9,7 @@
     "fontsource-roboto": "^2.1.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-flippy": "^0.1.5",
     "typescript": "~3.9.5",
     "use-reducer-with-side-effects": "^2.2.0",
     "uuid": "^8.1.0"
