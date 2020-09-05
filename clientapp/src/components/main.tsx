@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { useAppState } from 'app-state/use-app-state'
-import { HomeView } from 'components/home-view'
 import { assertNever } from 'system/assert-never'
 import { ClaimingChannelView } from 'components/claiming-channel-view'
 import { JoiningChannelView } from 'components/joining-channel-view'
 import { HostView } from 'components/host-view'
 import { PlayerView } from 'components/player-view'
+import { HomeView } from 'components/home-view'
 
 interface MainProps {}
 

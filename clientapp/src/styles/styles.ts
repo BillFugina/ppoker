@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     cards: {
       display: 'grid',
       gridColumnGap: '16px',
+      gridRowGap: '10px',
       gridTemplateColumns: 'repeat(auto-fit, 7.3em)',
       gridTemplateRows: 'repeat(auto-fit, 9.5em)',
       height: 0,
@@ -37,6 +38,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       '&.blank': {
         backgroundImage: ' url("/images/nami.png")',
       },
+
+      boxShadow: '5px 5px 5px gray',
     },
     chip: {
       margin: theme.spacing(0.5),

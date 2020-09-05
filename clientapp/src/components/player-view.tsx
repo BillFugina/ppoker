@@ -3,24 +3,27 @@ import { useAppState } from 'app-state/use-app-state'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { Grid, Paper, Chip } from '@material-ui/core'
-import { valueLabels, allValues, Value } from 'app-state/definitions'
-import { Flippy, FrontSide, BackSide } from 'react-flippy'
+import { valueLabels, Value } from 'app-state/definitions'
 import { useStyles } from 'styles/styles'
+import { CardChooser } from 'components/card-chooser'
+import { submitVote } from 'app-state/actions'
 
 interface PlayerViewProps {}
 
 const PlayerView: React.FunctionComponent<PlayerViewProps> = () => {
-  const [state] = useAppState()
-  const [selected, setSelected] = React.useState<Value | undefined>()
+  const [state, dispatch] = useAppState()
 
   const classes = useStyles()
 
-  const handleCardClick = (v: Value) => () => {
-    setSelected(currentValue => {
-      const result = currentValue !== v ? v : undefined
-      return result
-    })
+  const selected = state.roundValues[state.userName]
+
+  const handleCardChooserValueChange = (v?: Value) => {
+    if (state.roundState === 'open') {
+      dispatch(submitVote(state.userName, v))
+    }
   }
+
+  const showChooser = state.roundState === 'open' || state.roundState === 'closed'
 
   return (
     <>
@@ -54,18 +57,14 @@ const PlayerView: React.FunctionComponent<PlayerViewProps> = () => {
               ) : null}
             </Grid>
           </Grid>
-          <div className={classes.cards}>
-            {allValues.map(v => (
-              <div key={v} className={classes.card}>
-                <Flippy flipDirection='horizontal' isFlipped={selected === v}>
-                  <FrontSide className={classes.cardSide} onClick={handleCardClick(v)}>
-                    <div className={classes.cardDisplay}>{valueLabels[v]}</div>
-                  </FrontSide>
-                  <BackSide className={`${classes.cardSide} blank`} onClick={handleCardClick(v)}></BackSide>
-                </Flippy>
-              </div>
-            ))}
-          </div>
+          {showChooser && (
+            <CardChooser<Value>
+              readOnly={state.roundState === 'closed'}
+              values={valueLabels}
+              value={selected}
+              onValueChange={handleCardChooserValueChange}
+            />
+          )}
         </Container>
       </div>
     </>
