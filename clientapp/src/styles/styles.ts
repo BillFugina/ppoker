@@ -1,7 +1,19 @@
 import { createStyles, Theme, makeStyles } from '@material-ui/core'
 
-export const cardWidth = '7.3em'
-export const cardHeight = '9.5em'
+export const xsCardWidth = '4.4em'
+export const xsCardHeight = '5em'
+
+export const smCardWidth = '5.5em'
+export const smCardHeight = '7em'
+
+export const mdCardWidth = '6em'
+export const mdCardHeight = '8em'
+
+export const lgCardWidth = '6em'
+export const lgCardHeight = '8em'
+
+export const xlCardWidth = '8.5em'
+export const xlCardHeight = '11em'
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -9,18 +21,37 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(1),
     },
     cardSkeleton: {
-      height: cardHeight,
-      width: cardWidth,
+      height: mdCardHeight,
+      width: mdCardWidth,
     },
     cards: {
       display: 'grid',
       gridColumnGap: '16px',
       gridRowGap: '10px',
-      gridTemplateColumns: `repeat(auto-fit, ${cardWidth})`,
-      gridTemplateRows: `repeat(auto-fit, ${cardHeight})`,
-      height: 0,
+      gridTemplateColumns: `repeat(auto-fit, ${mdCardWidth})`,
+      gridTemplateRows: `repeat(auto-fit, ${mdCardHeight})`,
       justifyContent: 'center',
       width: '100%',
+      [theme.breakpoints.down('xs')]: {
+        gridTemplateColumns: `repeat(auto-fit, ${xsCardWidth})`,
+        gridTemplateRows: `repeat(auto-fit, ${xsCardHeight})`,
+      },
+      [theme.breakpoints.up('sm')]: {
+        gridTemplateColumns: `repeat(auto-fit, ${smCardWidth})`,
+        gridTemplateRows: `repeat(auto-fit, ${smCardHeight})`,
+      },
+      [theme.breakpoints.up('md')]: {
+        gridTemplateColumns: `repeat(auto-fit, ${mdCardWidth})`,
+        gridTemplateRows: `repeat(auto-fit, ${mdCardHeight})`,
+      },
+      [theme.breakpoints.up('lg')]: {
+        gridTemplateColumns: `repeat(auto-fit, ${lgCardWidth})`,
+        gridTemplateRows: `repeat(auto-fit, ${lgCardHeight})`,
+      },
+      [theme.breakpoints.up('xl')]: {
+        gridTemplateColumns: `repeat(auto-fit, ${xlCardWidth})`,
+        gridTemplateRows: `repeat(auto-fit, ${xlCardHeight})`,
+      },
     },
     cardDisplay: {
       alignSelf: 'center',
@@ -35,9 +66,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       cursor: 'pointer',
       gridTemplateColumns: '100%',
       gridTemplateRows: '100%;',
-      height: '9em',
       margin: '.25em',
-      width: '7em',
 
       backgroundColor: 'steelblue',
       display: 'grid',
@@ -46,6 +75,30 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
 
       boxShadow: '5px 5px 5px gray',
+
+      height: mdCardHeight,
+      width: mdCardWidth,
+
+      [theme.breakpoints.down('xs')]: {
+        height: xsCardHeight,
+        width: xsCardWidth,
+      },
+      [theme.breakpoints.up('sm')]: {
+        height: smCardHeight,
+        width: smCardWidth,
+      },
+      [theme.breakpoints.up('md')]: {
+        height: mdCardHeight,
+        width: mdCardWidth,
+      },
+      [theme.breakpoints.up('lg')]: {
+        height: lgCardHeight,
+        width: lgCardWidth,
+      },
+      [theme.breakpoints.up('xl')]: {
+        height: xlCardHeight,
+        width: xlCardWidth,
+      },
     },
     chip: {
       margin: theme.spacing(0.5),

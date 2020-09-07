@@ -3,6 +3,7 @@ import { Main } from 'components/main'
 import { AppStateProvider } from 'app-state/use-app-state'
 
 import 'fontsource-roboto'
+import { ThemeProvider, createMuiTheme, responsiveFontSizes, CssBaseline } from '@material-ui/core'
 
 // const initialState: AppState = {
 //   channelName: 'test',
@@ -14,10 +15,36 @@ import 'fontsource-roboto'
 //   users: ['bill', 'jack', 'fred'],
 // }
 
+const theme = responsiveFontSizes(
+  createMuiTheme({
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 350,
+        md: 600,
+        lg: 960,
+        xl: 1280,
+      },
+    },
+    overrides: {
+      MuiCssBaseline: {
+        '@global': {
+          html: {
+            backgroundColor: 'white',
+          },
+        },
+      },
+    },
+  }),
+)
+
 function App() {
   return (
     <AppStateProvider>
-      <Main />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Main />
+      </ThemeProvider>
     </AppStateProvider>
   )
 }

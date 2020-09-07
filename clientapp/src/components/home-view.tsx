@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useAppState } from 'app-state/use-app-state'
 import * as Action from 'app-state/actions'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { TextField, Grid, Button, Typography } from '@material-ui/core'
 import { isNilOrEmpty } from 'utility/string-functions'
@@ -72,58 +71,63 @@ const HomeView: React.FunctionComponent<HomeViewProps> = () => {
   const isPlaying = state.gameState === 'ownerView' || state.gameState === 'playerView'
 
   return (
-    <>
-      <CssBaseline />
-      <div className={classes.heroContent}>
-        <Container maxWidth='sm'>
-          <Typography component='h1' variant='h2' align='center' color='textPrimary' gutterBottom>
-            Planning Poker
-          </Typography>
-          <Typography variant='h5' align='center' color='textSecondary' paragraph>
-            Choose a unique game name and user name to start.
-          </Typography>
-          <TextField
-            disabled={isPlaying}
-            error={didClick && isChannelNameError}
-            fullWidth
-            helperText={channelNameHelperText}
-            id='channel-input'
-            label='Game Name'
-            onBlur={handleChannelNameBlur}
-            onChange={handleChannelNameChange}
-            required
-            value={channelName}
-          />
-          <TextField
-            disabled={isPlaying}
-            error={didClick && isUserNameError}
-            fullWidth
-            helperText={userNameHelperText}
-            id='user-input'
-            label='User Name'
-            onBlur={handleUserNameBlur}
-            onChange={handleUserNameChange}
-            required
-            value={userName}
-          />
+    <div className={classes.heroContent}>
+      <Container maxWidth='md'>
+        <Typography variant='h3' align='center' color='textPrimary' gutterBottom>
+          Planning Poker
+        </Typography>
+        <Typography variant='h5' align='center' color='textSecondary' paragraph>
+          Choose a unique game name and user name to start.
+        </Typography>
+        <Grid container direction={'column'} spacing={2}>
+          <Grid item>
+            <TextField
+              disabled={isPlaying}
+              error={didClick && isChannelNameError}
+              fullWidth
+              helperText={channelNameHelperText}
+              id='channel-input'
+              label='Game Name'
+              onBlur={handleChannelNameBlur}
+              onChange={handleChannelNameChange}
+              required
+              value={channelName}
+              variant='outlined'
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              disabled={isPlaying}
+              error={didClick && isUserNameError}
+              fullWidth
+              helperText={userNameHelperText}
+              id='user-input'
+              label='User Name'
+              onBlur={handleUserNameBlur}
+              onChange={handleUserNameChange}
+              required
+              value={userName}
+              variant='outlined'
+            />
+          </Grid>
+        </Grid>
 
-          <div className={classes.heroButtons}>
-            <Grid container spacing={2} justify='center'>
-              <Grid item>
-                <Button variant='contained' color='primary' onClick={handleHostClick}>
-                  Host Game
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button variant='outlined' color='primary' onClick={handleJoinClick}>
-                  Join Game
-                </Button>
-              </Grid>
+        <div className={classes.heroButtons}>
+          <Grid container spacing={2} justify='center'>
+            <Grid item>
+              <Button variant='contained' color='primary' onClick={handleHostClick}>
+                Host Game
+              </Button>
             </Grid>
-          </div>
-        </Container>
-      </div>
-    </>
+            <Grid item>
+              <Button variant='outlined' color='primary' onClick={handleJoinClick}>
+                Join Game
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
+      </Container>
+    </div>
   )
 }
 

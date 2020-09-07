@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent } from '@material-ui/core'
+import { Card, CardActions, CardContent, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { RoundState, Value, valueLabels } from 'app-state/definitions'
 import { PlayingCard } from 'components/playing-card'
@@ -33,8 +33,8 @@ const UserCard: React.FunctionComponent<UserCardProps> = props => {
             <PlayingCard />
           </Skeleton>
         ) : viewMode === 'card' ? (
-          <PlayingCard side={props.mode === 'open' ? 'back' : 'front'}>
-            {props.value && props.mode === 'closed' ? valueLabels[props.value] : null}
+          <PlayingCard side={props.mode === 'open' ? 'back' : 'front'} colorFront='white'>
+            <Typography variant='h2'>{props.value ? valueLabels[props.value] : ''}</Typography>
           </PlayingCard>
         ) : viewMode === 'blank' ? (
           <PlayingCard color='black' />
