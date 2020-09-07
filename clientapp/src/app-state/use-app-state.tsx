@@ -188,8 +188,8 @@ const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEff
   return sideEffects.length > 0 ? UpdateWithSideEffect(result, sideEffects) : Update(result)
 }
 
-const AppStateHook = (): [AppState, React.Dispatch<AppStateAction>] => {
-  const [state, dispatch] = useReducerWithEffects(appStateReducer, defaultAppState())
+const AppStateHook = (initialState?: Partial<AppState>): [AppState, React.Dispatch<AppStateAction>] => {
+  const [state, dispatch] = useReducerWithEffects(appStateReducer, { ...defaultAppState(), ...initialState })
   const [message, send] = useChannel<ChannelMessage>(state.channelName || 'none')
   const [handledMessages, setHandledMessages] = React.useState<string[]>([])
 
@@ -240,12 +240,12 @@ const AppStateHook = (): [AppState, React.Dispatch<AppStateAction>] => {
 export const AppStateContext = React.createContext<ReturnType<typeof AppStateHook>>(null as any)
 
 interface AppStateProviderProps {
-  initialState?: AppState
+  initialState?: Partial<AppState>
   children: React.ReactElement
 }
 
 export const AppStateProvider: React.FunctionComponent<AppStateProviderProps> = props => {
-  const appStateHook = AppStateHook()
+  const appStateHook = AppStateHook(props.initialState)
   return <AppStateContext.Provider value={appStateHook}>{props.children}</AppStateContext.Provider>
 }
 

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card } from 'components/card'
+import { PlayingCard } from 'components/playing-card'
 import { useStyles } from 'styles/styles'
 import { NamedColor } from 'csstype'
 
@@ -33,9 +33,10 @@ function CardChooser<T extends string | number | symbol>(props: React.PropsWithC
           ? 'green'
           : 'steelblue'
         return (
-          <Card key={v.toString()} onClick={handleCardClick(v)} color={color} side={selected ? 'back' : 'front'}>
+          <PlayingCard key={v.toString()} onClick={handleCardClick(v)} color={color} side={selected ? 'back' : 'front'}>
             <span>{props.values[v]}</span>
-          </Card>
+            <span>{props.values[v]}</span>
+          </PlayingCard>
         )
       })}
     </div>

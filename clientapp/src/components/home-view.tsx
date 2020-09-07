@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useAppState } from 'app-state/use-app-state'
 import * as Action from 'app-state/actions'
 import CssBaseline from '@material-ui/core/CssBaseline'
-// import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import { TextField, Grid, Button, Typography } from '@material-ui/core'
 import { isNilOrEmpty } from 'utility/string-functions'
@@ -122,18 +121,6 @@ const HomeView: React.FunctionComponent<HomeViewProps> = () => {
               </Grid>
             </Grid>
           </div>
-          {/* <div className={classes.cards}>
-            {allValues.map(v => (
-              <div key={v} className={classes.card}>
-                <Flippy flipDirection='horizontal'>
-                  <FrontSide className={`${classes.cardSide}`}>
-                    <div className={classes.cardDisplay}>{valueLabels[v]}</div>
-                  </FrontSide>
-                  <BackSide>X</BackSide>
-                </Flippy>
-              </div>
-            ))}
-          </div> */}
         </Container>
       </div>
     </>

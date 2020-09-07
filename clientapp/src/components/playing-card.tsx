@@ -17,32 +17,36 @@ interface CardProps {
   side?: CardSide
 }
 
-const Card: React.FunctionComponent<CardProps> = props => {
+const PlayingCard: React.FunctionComponent<CardProps> = props => {
   const classes = useStyles()
+
+  const contents = React.Children.toArray(props.children)
+  const frontContents = contents[0]
+  const backContents = contents[1]
 
   return (
     <Flippy flipDirection='horizontal' isFlipped={props.side === 'back'}>
       <FrontSide
-        className={classNames(classes.cardSide, { blank: props.children == null })}
+        className={classNames(classes.cardSide, { blank: frontContents == null })}
         onClick={props.onClick}
         style={{ backgroundColor: props.colorFront ?? props.color }}
       >
-        <div className={classes.cardDisplay}>{props.children}</div>
+        {frontContents ? <div className={classes.cardDisplay}>{frontContents}</div> : null}
       </FrontSide>
       <BackSide
-        className={classNames(classes.cardSide, { blank: props.children == null })}
+        className={classNames(classes.cardSide, { blank: backContents == null })}
         onClick={props.onClick}
         style={{ backgroundColor: props.colorBack ?? props.color }}
       >
-        <div className={classes.cardDisplay}>{props.children}</div>
+        {backContents ? <div className={classes.cardDisplay}>{backContents}</div> : null}
       </BackSide>
     </Flippy>
   )
 }
 
-Card.defaultProps = {
+PlayingCard.defaultProps = {
   color: 'steelblue',
   side: 'back',
 }
 
-export { Card }
+export { PlayingCard }

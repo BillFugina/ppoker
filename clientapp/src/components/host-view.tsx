@@ -3,9 +3,9 @@ import { useAppState } from 'app-state/use-app-state'
 import * as Action from 'app-state/actions'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
-import { TextField, Grid, Button, Paper, Chip } from '@material-ui/core'
-import { valueLabels } from 'app-state/definitions'
+import { TextField, Grid, Button, Chip } from '@material-ui/core'
 import { useStyles } from 'styles/styles'
+import { UserCards } from 'components/user-cards'
 
 interface HostViewProps {}
 
@@ -67,7 +67,9 @@ const HostView: React.FunctionComponent<HostViewProps> = () => {
             </Grid>
           ) : null}
 
-          <Grid item xs={12}>
+          <UserCards />
+
+          {/* <Grid item xs={12}>
             <Paper className={classes.button}>
               {state.users.map(user => {
                 const value = state.roundValues[user]
@@ -84,7 +86,7 @@ const HostView: React.FunctionComponent<HostViewProps> = () => {
                 return result
               })}
             </Paper>
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <Chip label={`Game State: ${state.gameState}`} />

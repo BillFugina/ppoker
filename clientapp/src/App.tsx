@@ -4,6 +4,16 @@ import { AppStateProvider } from 'app-state/use-app-state'
 
 import 'fontsource-roboto'
 
+// const initialState: AppState = {
+//   channelName: 'test',
+//   channelOwner: 'bill',
+//   gameState: 'ownerView',
+//   roundState: 'waiting',
+//   roundValues: {},
+//   userName: 'bill',
+//   users: ['bill', 'jack', 'fred'],
+// }
+
 function App() {
   return (
     <AppStateProvider>
