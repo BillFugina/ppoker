@@ -3,6 +3,7 @@ import { Channel } from 'pusher-js'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { PusherSendMessage } from 'pusher/definitions'
 import { pusherContext } from 'pusher/pusher-context'
+import { useWhyDidYouUpdate } from 'hooks/use-why-did-you-update'
 
 const usePusher = <TMessageFormat>(channelName: string, eventName: string, privateChannel: boolean) => {
   const [channel, setChannel] = useState<Channel | undefined>()
@@ -10,11 +11,13 @@ const usePusher = <TMessageFormat>(channelName: string, eventName: string, priva
 
   const pusher = useContext(pusherContext)
 
+  const clientEventName = React.useMemo(() => `client-${eventName}`, [eventName])
+
   const messageHandler = useCallback((message: TMessageFormat) => {
     setMessage(message)
   }, [])
 
-  const clientEventName = `client-${eventName}`
+  useWhyDidYouUpdate('usePusher', { channelName, eventName, clientEventName, messageHandler })
 
   useEffect(() => {
     const finalChannelName = `${privateChannel ? 'private-' : ''}${channelName}`

@@ -22,7 +22,7 @@ import {
   UpdateWithSideEffect,
 } from 'hooks/use-reducer-with-side-effects'
 import { assertNever } from 'system/assert-never'
-import { getChanges } from 'hooks/use-why-did-you-update'
+import { getChanges, useWhyDidYouUpdate } from 'hooks/use-why-did-you-update'
 
 const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEffects<AppState, AppStateAction> => {
   const isOwner = state.channelOwner === state.userName
@@ -196,6 +196,8 @@ const AppStateHook = (initialState?: Partial<AppState>): [AppState, React.Dispat
   const [state, dispatch] = useReducerWithEffects(appStateReducer, { ...defaultAppState(), ...initialState })
   const [message, send] = useChannel<ChannelMessage>(state.channelName || 'none')
   const [handledMessages, setHandledMessages] = React.useState<string[]>([])
+
+  useWhyDidYouUpdate('AppState', { dispatch, send })
 
   React.useEffect(() => {
     dispatch(updateSendFunction(send))

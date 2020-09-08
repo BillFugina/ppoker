@@ -14,7 +14,7 @@ import * as React from 'react'
  * IMPORTANT: Only use this hook when debugging. Do not leave references to this hook in production code.
  */
 // @ts-ignore
-export const whyDidYouUpdate = <T extends {}>(name: string, props: T) => {
+export const useWhyDidYouUpdate = <T extends {}>(name: string, props: T) => {
   const previousProps = React.useRef<T | null>(null)
   const counter = React.useRef<number>(0)
 
