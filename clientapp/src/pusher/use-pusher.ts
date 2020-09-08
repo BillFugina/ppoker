@@ -34,7 +34,7 @@ const usePusher = <TMessageFormat>(channelName: string, eventName: string, priva
         setChannel(undefined)
       }
     }
-  }, [channelName])
+  }, [channel, channelName, privateChannel, pusher])
 
   useEffect(() => {
     if (channel && eventName) {
@@ -47,12 +47,12 @@ const usePusher = <TMessageFormat>(channelName: string, eventName: string, priva
         channel.unbind_all()
       }
     }
-  }, [channel, eventName])
+  }, [channel, clientEventName, eventName, messageHandler])
 
   const sendMessage: PusherSendMessage<TMessageFormat> = React.useCallback(
     (message: TMessageFormat, selfProcess?: boolean) => {
       if (!privateChannel) {
-        throw `Can only send messages over a private channel. This channel is not private.`
+        throw new Error(`Can only send messages over a private channel. This channel is not private.`)
       } else if (channel && eventName) {
         channel.trigger(clientEventName, message)
         if (selfProcess) {
@@ -60,7 +60,7 @@ const usePusher = <TMessageFormat>(channelName: string, eventName: string, priva
         }
       }
     },
-    [channel, eventName],
+    [channel, clientEventName, eventName, privateChannel],
   )
 
   return [message, sendMessage]

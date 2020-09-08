@@ -22,6 +22,7 @@ import {
   UpdateWithSideEffect,
 } from 'hooks/use-reducer-with-side-effects'
 import { assertNever } from 'system/assert-never'
+import { getChanges } from 'hooks/use-why-did-you-update'
 
 const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEffects<AppState, AppStateAction> => {
   const isOwner = state.channelOwner === state.userName
@@ -179,10 +180,13 @@ const appStateReducer = (state: AppState, action: AppStateAction): TStateWithEff
     assertNever(action)
   }
 
+  const diff = getChanges(state, result)
+
   console.log(`app state action: %c${action.type}`, 'background: green; color: white; display: block;', {
     previousState: state,
     action,
     newState: result,
+    diff,
   })
 
   return sideEffects.length > 0 ? UpdateWithSideEffect(result, sideEffects) : Update(result)
