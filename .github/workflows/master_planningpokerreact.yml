@@ -24,6 +24,12 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
+        env:
+          REACT_APP_PUSHER_APP_ID: ${{ secrets.REACT_APP_PUSHER_APP_ID}}
+          REACT_APP_PUSHER_KEY: ${{ secrets.REACT_APP_PUSHER_KEY}}
+          REACT_APP_PUSHER_SECRET: ${{ secrets.REACT_APP_PUSHER_SECRET}}
+          REACT_APP_PUSHER_CLUSTER: ${{ secrets.REACT_APP_PUSHER_CLUSTER}}
+          REACT_APP_PUSHER_AUTH_ENDPOINT: ${{ secrets.REACT_APP_PUSHER_AUTH_ENDPOINT}}
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Deploy to Azure Web App
