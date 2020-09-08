@@ -1,3 +1,3 @@
-import { useStorageChannel } from 'channel/use-storage-channel'
+import { usePusherChannel } from 'channel/use-pusher-channel'
 
-export { useStorageChannel as useChannel }
+export { usePusherChannel as useChannel }
